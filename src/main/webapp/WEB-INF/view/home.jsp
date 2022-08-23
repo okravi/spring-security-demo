@@ -31,6 +31,13 @@
 		</p>
 	<hr>
 	
+	<hr>
+		<p>
+			<a href="${pageContext.request.contextPath}/systems">IT Systems</a>
+			(Only for admins)
+		</p>
+	<hr>
+	
 	<form:form action="${pageContext.request.contextPath}/logout" method="POST">
 	
 		<input type="submit" value="Logout" />
