@@ -32,7 +32,14 @@
 			<artifactId>spring-security-config</artifactId>
 			<version>5.7.3</version>
 		</dependency>
-
+		
+		<!-- Add Spring Security taglibs -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>5.7.3</version>
+		</dependency>
+		
 		<!-- Spring MVC support -->
 		<dependency>
 			<groupId>org.springframework</groupId>
