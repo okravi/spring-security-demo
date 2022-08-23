@@ -24,19 +24,23 @@
 	<p>
 	<hr>
 	
+	<security:authorize access="hasRole('MANAGER')">
 	<hr>
 		<p>
 			<a href="${pageContext.request.contextPath}/leaders">Leadership Meeting</a>
 			(Only for managers)
 		</p>
 	<hr>
+	</security:authorize>
 	
+	<security:authorize access="hasRole('ADMIN')">	
 	<hr>
 		<p>
 			<a href="${pageContext.request.contextPath}/systems">IT Systems</a>
 			(Only for admins)
 		</p>
 	<hr>
+	</security:authorize>
 	
 	<form:form action="${pageContext.request.contextPath}/logout" method="POST">
 	
