@@ -1,5 +1,6 @@
 package com.luv2code.springsecurity.demo.config;
 
+import java.beans.PropertyVetoException;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
@@ -13,6 +14,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 @Configuration
 @EnableWebMvc
@@ -39,19 +42,78 @@ public class DemoAppConfig {
 		return viewResolver;
 	}
 	
+	
+	// define a bean for our security datasource
+	
 	//define a bean for the security data source
-	public DataSource securityDataSource() {
+		@Bean
+		public DataSource securityDataSource() {
+			
+			//create a connection pool
+			ComboPooledDataSource securityDataSource 
+				= new ComboPooledDataSource();
+			//set up jdbc driver class
+			try {
+				System.out.println("In DemoAppConfig.java - trying setDriverClass ");
+
+				securityDataSource.setDriverClass(env.getProperty("jdbc.driver"));
+			} catch (PropertyVetoException e) {
+				System.out.println("In DemoAppConfig.java - catching exception ");
+
+				throw new RuntimeException(e);
+			}
 		
-		//create a connection pool
 		
-		//set up jdbc driver class
 		
 		//log the connection props
+		logger.info("jdbc.url=" + env.getProperty("jdbc.url"));
+		logger.info("jdbc.user=" + env.getProperty("jdbc.user"));
 		
 		//set database connection props
+		securityDataSource.setJdbcUrl(env.getProperty("jdbc.url"));
+		securityDataSource.setUser(env.getProperty("jdbc.user"));
+		securityDataSource.setPassword(env.getProperty("jdbc.password"));
+
+		
+	
 		
 		//set connection pool props
+		securityDataSource.setInitialPoolSize(getIntProperty("connection.pool.initialPoolSize"));
+		securityDataSource.setMinPoolSize(getIntProperty("connection.pool.minPoolSize"));
+		securityDataSource.setMaxPoolSize(getIntProperty("connection.pool.maxPoolSize"));
+		securityDataSource.setMaxIdleTime(getIntProperty("connection.pool.maxIdleTime"));
+				
+		System.out.println("In DemoAppConfig.java - should be returning securityDataSource now");
+
+		return securityDataSource;
+	}
+	
+	// need a helper method 
+	// read environment property and convert to int
+	
+	private int getIntProperty(String propName) {
 		
-		return null;
+		String propVal = env.getProperty(propName);
+		
+		// now convert to int
+		int intPropVal = Integer.parseInt(propVal);
+		
+		return intPropVal;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
